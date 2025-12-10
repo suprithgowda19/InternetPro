@@ -17,55 +17,42 @@
                     <div class="card-body">
                         <h5 class="fw-bold mb-3">User Details</h5>
 
-                        
+
                         <div class="mb-3">
                             <label class="form-label fw-semibold">Clinic Name</label>
-                            <input type="text"
-                                   class="form-control"
-                                   value="{{ optional($ticket->user)->clinic_name ?? 'N/A' }}"
-                                   readonly>
+                            <input type="text" class="form-control"
+                                value="{{ optional($ticket->user)->clinic_name ?? 'N/A' }}" readonly>
                         </div>
 
                         <div class="mb-3">
                             <label class="form-label fw-semibold">Ward</label>
-                            <input type="text"
-                                   class="form-control"
-                                   value="{{ optional(optional($ticket->user)->ward)->name ?? 'N/A' }}"
-                                   readonly>
+                            <input type="text" class="form-control"
+                                value="{{ optional(optional($ticket->user)->ward)->name ?? 'N/A' }}" readonly>
                         </div>
 
                         <div class="mb-3">
                             <label class="form-label fw-semibold">Communication Person Name</label>
-                            <input type="text"
-                                   class="form-control"
-                                   value="{{ optional($ticket->user)->name ?? 'N/A' }}"
-                                   readonly>
+                            <input type="text" class="form-control" value="{{ optional($ticket->user)->name ?? 'N/A' }}"
+                                readonly>
                         </div>
 
                         {{-- Issue Description --}}
                         <div class="mb-3">
                             <label class="form-label fw-semibold">Issue Description</label>
-                            <textarea class="form-control"
-                                      readonly
-                                      style="height:auto; white-space:normal;">{{ $ticket->description }}</textarea>
+                            <textarea class="form-control" readonly style="height:auto; white-space:normal;">{{ $ticket->description }}</textarea>
                         </div>
 
                         <hr>
 
-                        <form action="{{ route('tickets.update', $ticket->id) }}"
-                              method="POST"
-                              enctype="multipart/form-data"
-                              class="needs-validation"
-                              novalidate>
+                        <form action="{{ route('tickets.update', $ticket->id) }}" method="POST"
+                            enctype="multipart/form-data" class="needs-validation" novalidate>
                             @csrf
                             @method('PUT')
 
                             <div class="mb-3">
                                 <label class="form-label fw-semibold">Upload Image</label>
-                                <input type="file"
-                                       name="admin_image"
-                                       accept="image/*"
-                                       class="form-control @error('admin_image') is-invalid @enderror">
+                                <input type="file" name="admin_image" accept="image/*"
+                                    class="form-control @error('admin_image') is-invalid @enderror">
 
                                 @error('admin_image')
                                     <div class="invalid-feedback">{{ $message }}</div>
@@ -79,9 +66,7 @@
                             </div>
                             <div class="mb-3">
                                 <label class="form-label fw-semibold">Remarks</label>
-                                <textarea class="form-control @error('admin_remarks') is-invalid @enderror"
-                                          name="admin_remarks"
-                                          rows="2">{{ old('admin_remarks', $ticket->admin_remarks) }}</textarea>
+                                <textarea class="form-control @error('admin_remarks') is-invalid @enderror" name="admin_remarks" rows="2">{{ old('admin_remarks', $ticket->admin_remarks) }}</textarea>
 
                                 @error('admin_remarks')
                                     <div class="invalid-feedback">{{ $message }}</div>
@@ -90,19 +75,18 @@
 
                             <div class="mb-3">
                                 <label class="form-label fw-semibold">Status</label>
-                                <select name="status"
-                                        class="form-select @error('status') is-invalid @enderror"
-                                        required>
-                                    <option value="Pending" {{ old('status', $ticket->status) == 'Pending' ? 'selected' : '' }}>
-                                        Pending
+                                <select name="status" class="form-select @error('status') is-invalid @enderror" required>
+                                    <option value="Pending"
+                                        {{ old('status', $ticket->status) === 'pending' ? 'selected' : '' }}>Pending
                                     </option>
-                                    <option value="Irrelevant" {{ old('status', $ticket->status) == 'Irrelevant' ? 'selected' : '' }}>
-                                        Irrelevant
+                                    <option value="Irrelevant"
+                                        {{ old('status', $ticket->status) === 'irrelevant' ? 'selected' : '' }}>Irrelevant
                                     </option>
-                                    <option value="Resolved" {{ old('status', $ticket->status) == 'Resolved' ? 'selected' : '' }}>
-                                        Resolved
+                                    <option value="Resolved"
+                                        {{ old('status', $ticket->status) === 'resolved' ? 'selected' : '' }}>Resolved
                                     </option>
                                 </select>
+
 
                                 @error('status')
                                     <div class="invalid-feedback">{{ $message }}</div>
@@ -110,9 +94,7 @@
                             </div>
 
                             <div class="text-center">
-                                <button type="submit"
-                                        class="btn btn-primary px-4 fw-bold"
-                                        style="border-radius: 10px;">
+                                <button type="submit" class="btn btn-primary px-4 fw-bold" style="border-radius: 10px;">
                                     Update Ticket
                                 </button>
                             </div>

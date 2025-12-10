@@ -7,35 +7,26 @@ use App\Models\Ward;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class TicketController extends Controller
 {
-  
     public function index()
     {
         $user = Auth::user();
 
-        if ($user->hasRole('admin')) {
-            // Admin: see all tickets with user + ward
-            $tickets = Ticket::with(['user.ward'])
-                ->latest()
-                ->get();
-        } else {
-            // Normal user: see only own tickets
-            $tickets = Ticket::with(['user.ward'])
-                ->where('user_id', $user->id)
-                ->latest()
-                ->get();
-        }
+        $tickets = Ticket::with(['user.ward'])
+            ->when(!$user->hasRole('admin'), function ($q) use ($user) {
+                return $q->where('user_id', $user->id);
+            })
+            ->latest()
+            ->get();
 
         $wards = Ward::select('id', 'name')->get();
 
         return view('tickets.index', compact('tickets', 'wards', 'user'));
     }
 
-    /**
-     * Create a new ticket (authorized user only).
-     */
     public function create()
     {
         $user = Auth::user();
@@ -46,6 +37,8 @@ class TicketController extends Controller
 
         return view('tickets.create', compact('user'));
     }
+
+
     public function store(Request $request)
     {
         $user = Auth::user();
@@ -53,16 +46,17 @@ class TicketController extends Controller
         if ($user->hasRole('admin')) {
             abort(403, 'Admins cannot create tickets.');
         }
+
         $validated = $request->validate([
-            'description' => 'required|string',
+            'description' => 'required|string|max:5000',
         ]);
+
         Ticket::create([
-            'user_id'          => $user->id,
-            'description'      => $validated['description'],
-            'status'           => 'Pending',
-            'admin_resolution' => null,
-            'admin_remarks'    => null,
-            'admin_image'      => null,
+            'user_id'     => $user->id,
+            'description' => $validated['description'],
+            'status'      => 'Pending',
+            'admin_remarks' => null,
+            'admin_image'   => null,
         ]);
 
         return redirect()
@@ -70,14 +64,11 @@ class TicketController extends Controller
             ->with('success', 'Ticket raised successfully!');
     }
 
-    /**
-     * Show a single ticket (authorized user only).
-     */
+
     public function show($id)
     {
         $ticket = Ticket::with(['user.ward'])->findOrFail($id);
-        // - admin can view any
-        // - normal user can view only own ticket
+
         $this->authorize('view', $ticket);
 
         return view('tickets.show', compact('ticket'));
@@ -97,6 +88,7 @@ class TicketController extends Controller
         return view('tickets.edit', compact('ticket'));
     }
 
+
     public function update(Request $request, $id)
     {
         $user = Auth::user();
@@ -108,9 +100,9 @@ class TicketController extends Controller
         $ticket = Ticket::findOrFail($id);
 
         $validated = $request->validate([
-            'admin_remarks' => 'nullable|string',
+            'admin_remarks' => 'nullable|string|max:5000',
             'status'        => 'required|in:Pending,Irrelevant,Resolved',
-            'admin_image'   => 'nullable|image|max:2048',
+            'admin_image'   => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
         $data = [
@@ -118,14 +110,22 @@ class TicketController extends Controller
             'status'        => $validated['status'],
         ];
 
+        // Handle image upload
         if ($request->hasFile('admin_image')) {
-         
+
+            // Delete previous image if exists
             if ($ticket->admin_image) {
                 Storage::disk('public')->delete($ticket->admin_image);
             }
 
-            $data['admin_image'] = $request->file('admin_image')
-                ->store('ticket_resolutions', 'public');
+            // Generate unique filename
+            $filename = Str::uuid() . '.' . $request->file('admin_image')->extension();
+
+            // Store safely in public disk
+            $storedPath = $request->file('admin_image')
+                                  ->storeAs('ticket_resolutions', $filename, 'public');
+
+            $data['admin_image'] = $storedPath;
         }
 
         $ticket->update($data);
@@ -134,11 +134,13 @@ class TicketController extends Controller
             ->route('tickets.index')
             ->with('success', 'Ticket updated successfully!');
     }
+
+
     public function destroy($id)
     {
         $user = Auth::user();
 
-        if (! $user->hasRole('admin')) {
+        if (!$user->hasRole('admin')) {
             abort(403, 'Only admins can delete tickets.');
         }
 

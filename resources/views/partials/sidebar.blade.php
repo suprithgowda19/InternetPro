@@ -1,11 +1,11 @@
 <div class="sidebar-wrapper">
     <div>
         <div class="logo-wrapper d-flex align-items-center gap-2">
-            <a href="{{ url('/') }}" class="d-flex align-items-center">
-                <img class="img-fluid for-light" src="{{ asset('assets/images/newimages/headernewlogo16biffes.png') }}"
-                    alt="">
-                <img class="img-fluid for-dark" src="{{ asset('assets/images/newimages/headernewlogo16biffes.png') }}"
-                    alt="">
+            <a href="" class="d-flex align-items-center">
+                <img style="width: 40px;" class="img-fluid for-light" src="{{ asset('assets/images/mcware-logo.jpg') }}"
+                    alt="Logo">
+                <img style="width: 50px;" class="img-fluid for-dark" src="{{ asset('assets/images/mcware-logo.jpg') }}"
+                    alt="Logo Dark">
             </a>
             <h3 class="mb-0 ms-1 fw-bold">
                 {{ auth()->user()->hasRole('admin') ? 'Admin' : 'User' }}
@@ -19,7 +19,7 @@
             <div id="sidebar-menu">
                 <ul class="sidebar-links" id="simple-bar">
 
-                   
+
                     <li class="back-btn">
                         <a href="{{ url('/') }}">
                             <img class="img-fluid" src="{{ asset('assets/images/logo-icon.png') }}" alt="">
@@ -27,8 +27,31 @@
                         <div class="mobile-back text-end"><span>Back</span></div>
                     </li>
 
+                    @role('user')
+                        <li class="sidebar-list">
 
-                   
+                            <a class="sidebar-link sidebar-title link-nav"
+                                href="{{ route('admin.users.show', auth()->id()) }}">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                    <g>
+                                        <g>
+                                            <path d="M9.07861 16.1355H14.8936" stroke="#130F26" stroke-width="1.5" />
+                                            <path fill-rule="evenodd" clip-rule="evenodd" d="M2.3999 13.713C2.3999 8.082 3.0139 8.475 6.3189 5.41
+                                                                        C7.7649 4.246 10.0149 2 11.9579 2
+                                                                        C13.8999 2 16.1949 4.235 17.6539 5.41
+                                                                        C20.9589 8.475 21.5719 8.082 21.5719 13.713
+                                                                        C21.5719 22 19.6129 22 11.9859 22
+                                                                        C4.3589 22 2.3999 22 2.3999 13.713Z"
+                                                stroke="#130F26" stroke-width="1.5" />
+                                        </g>
+                                    </g>
+                                </svg>
+                                <span>Profile</span>
+                            </a>
+
+                        </li>
+                    @endrole
+
 
                     @role('admin')
                         <li class="sidebar-list">
@@ -39,9 +62,9 @@
                                             <path d="M9.07861 16.1355H14.8936" stroke="#130F26" stroke-width="1.5" />
                                             <path fill-rule="evenodd" clip-rule="evenodd"
                                                 d="M2.3999 13.713C2.3999 8.082 3.0139 8.475 6.3189 5.41C7.7649 4.246 10.0149 2 11.9579 2
-                                                                        C13.8999 2 16.1949 4.235 17.6539 5.41C20.9589 8.475 21.5719 8.082 21.5719 13.713
-                                                                        C21.5719 22 19.6129 22 11.9859 22C4.3589 22 2.3999 22 2.3999 13.713Z" stroke="#130F26"
-                                                stroke-width="1.5" />
+                                                                                                    C13.8999 2 16.1949 4.235 17.6539 5.41C20.9589 8.475 21.5719 8.082 21.5719 13.713
+                                                                                                    C21.5719 22 19.6129 22 11.9859 22C4.3589 22 2.3999 22 2.3999 13.713Z"
+                                                stroke="#130F26" stroke-width="1.5" />
                                         </g>
                                     </g>
                                 </svg>
@@ -78,11 +101,12 @@
                                         <g>
                                             <path d="M9.07861 16.1355H14.8936" stroke="#130F26" stroke-width="1.5" />
                                             <path fill-rule="evenodd" clip-rule="evenodd" d="M2.3999 13.713C2.3999 8.082 3.0139 8.475 6.3189 5.41
-                                            C7.7649 4.246 10.0149 2 11.9579 2
-                                            C13.8999 2 16.1949 4.235 17.6539 5.41
-                                            C20.9589 8.475 21.5719 8.082 21.5719 13.713
-                                            C21.5719 22 19.6129 22 11.9859 22
-                                            C4.3589 22 2.3999 22 2.3999 13.713Z" stroke="#130F26" stroke-width="1.5" />
+                                                                        C7.7649 4.246 10.0149 2 11.9579 2
+                                                                        C13.8999 2 16.1949 4.235 17.6539 5.41
+                                                                        C20.9589 8.475 21.5719 8.082 21.5719 13.713
+                                                                        C21.5719 22 19.6129 22 11.9859 22
+                                                                        C4.3589 22 2.3999 22 2.3999 13.713Z"
+                                                stroke="#130F26" stroke-width="1.5" />
                                         </g>
                                     </g>
                                 </svg>
@@ -101,11 +125,12 @@
                                         <g>
                                             <path d="M9.07861 16.1355H14.8936" stroke="#130F26" stroke-width="1.5" />
                                             <path fill-rule="evenodd" clip-rule="evenodd" d="M2.3999 13.713C2.3999 8.082 3.0139 8.475 6.3189 5.41
-                                        C7.7649 4.246 10.0149 2 11.9579 2
-                                        C13.8999 2 16.1949 4.235 17.6539 5.41
-                                        C20.9589 8.475 21.5719 8.082 21.5719 13.713
-                                        C21.5719 22 19.6129 22 11.9859 22
-                                        C4.3589 22 2.3999 22 2.3999 13.713Z" stroke="#130F26" stroke-width="1.5" />
+                                                                    C7.7649 4.246 10.0149 2 11.9579 2
+                                                                    C13.8999 2 16.1949 4.235 17.6539 5.41
+                                                                    C20.9589 8.475 21.5719 8.082 21.5719 13.713
+                                                                    C21.5719 22 19.6129 22 11.9859 22
+                                                                    C4.3589 22 2.3999 22 2.3999 13.713Z" stroke="#130F26"
+                                                stroke-width="1.5" />
                                         </g>
                                     </g>
                                 </svg>
@@ -132,29 +157,7 @@
 
 
                     {{-- only user PROFILE can access (Users) --}}
-                    @role('user')
-                        <li class="sidebar-list">
 
-                            <a class="sidebar-link sidebar-title link-nav"
-                                href="{{ route('admin.users.show', auth()->id()) }}">
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                    <g>
-                                        <g>
-                                            <path d="M9.07861 16.1355H14.8936" stroke="#130F26" stroke-width="1.5" />
-                                            <path fill-rule="evenodd" clip-rule="evenodd" d="M2.3999 13.713C2.3999 8.082 3.0139 8.475 6.3189 5.41
-                                            C7.7649 4.246 10.0149 2 11.9579 2
-                                            C13.8999 2 16.1949 4.235 17.6539 5.41
-                                            C20.9589 8.475 21.5719 8.082 21.5719 13.713
-                                            C21.5719 22 19.6129 22 11.9859 22
-                                            C4.3589 22 2.3999 22 2.3999 13.713Z" stroke="#130F26" stroke-width="1.5" />
-                                        </g>
-                                    </g>
-                                </svg>
-                                <span>Profile</span>
-                            </a>
-
-                        </li>
-                    @endrole
 
 
 

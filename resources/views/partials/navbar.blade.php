@@ -1,15 +1,13 @@
-<div class="page-header">
-    <div class="header-wrapper row m-0">
-        <div class="header-logo-wrapper col-auto p-0">
-            <div class="logo-wrapper">
-                <a href="index.html">
-                    <img class="img-fluid" src="{{ asset('assets/images/logo/logo.png') }}" alt="">
-                </a>
-            </div>
-            <div class="toggle-sidebar">
+<header class="page-header">
+    <div class="header-wrapper d-flex justify-content-between align-items-center px-3">
+
+        <!-- Left: Sidebar Toggle + Title + Logo -->
+        <div class="d-flex align-items-center gap-3">
+
+            <!-- Sidebar Toggle -->
+            <div class="toggle-sidebar ">
                 <div class="status_toggle sidebar-toggle d-flex">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
-                        xmlns="http://www.w3.org/2000/svg">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <g>
                             <g>
                                 <path fill-rule="evenodd" clip-rule="evenodd"
@@ -34,15 +32,17 @@
                 </div>
             </div>
         </div>
-        <div class="left-side-header col ps-0 d-none d-md-block"></div>
-        <div class="nav-right col-10 col-sm-6 pull-right right-header p-0">
+        <div class="d-flex align-items-center gap-2">
+               <img src="{{ asset('assets/images/BBMPlogo.png') }}" alt="Company Logo" style="width:32px;height:32px;">
+            <h4 class="mb-0 fw-bold">GBA Namma Clinic</h4>
+         
+        </div>
+
+        <!-- Right: Action Icons -->
+
+        <div class="nav-right   pull-right right-header p-0">
             <ul class="nav-menus">
-                <li class="d-md-none resp-serch-input">
-                    <div class="resp-serch-box"><i data-feather="search"></i></div>
-                    <div class="form-group search-form">
-                        <input type="text" placeholder="Search here...">
-                    </div>
-                </li>
+                
                 <li class="maximize">
                     <a class="text-dark" href="#!" onclick="javascript:toggleFullScreen()">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -117,5 +117,6 @@
                 </li>
             </ul>
         </div>
+
     </div>
-</div>
+</header>

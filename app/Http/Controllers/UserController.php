@@ -7,26 +7,29 @@ use App\Models\Ward;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Carbon\Carbon;
+use PDF;
 
 class UserController extends Controller
 {
- 
     public function index()
     {
         $this->authorizeAdmin();
+
         $users = User::with('ward')->latest()->get();
-         $wards = Ward::select('id', 'name')->get();
-        return view('users.index', compact(['users', 'wards'])); 
+        $wards = Ward::select('id', 'name')->get();
+
+        return view('users.index', compact('users', 'wards'));
     }
 
-   
     public function create()
     {
         $this->authorizeAdmin();
-        $wards = Ward::orderBy('name')->get();
+
+        $wards = Ward::orderByRaw('number + 0 ASC')->get();
+
         return view('users.create', compact('wards'));
     }
-
 
     public function store(Request $request)
     {
@@ -41,22 +44,16 @@ class UserController extends Controller
             'name'            => 'required|string',
             'phone'           => 'required|digits:10|unique:users,phone',
             'internet_speed'  => 'required|string',
-            'bandwidth'       => 'required|string',
+            'latitude'        => 'nullable|numeric|between:-90,90',
+            'longitude'       => 'nullable|numeric|between:-180,180',
         ]);
 
-        DB::transaction(function () use ($validated) {
-            $user = User::create([
-                'ward_id'         => $validated['ward_id'],
-                'clinic_name'     => $validated['clinic_name'],
-                'password'        => Hash::make($validated['password']),
-                'email'           => $validated['email'],
-                'internet_status' => $validated['internet_status'],
-                'name'            => $validated['name'],
-                'phone'           => $validated['phone'],
-                'internet_speed'  => $validated['internet_speed'],
-                'bandwidth'       => $validated['bandwidth'],
-            ]);
+        // Bandwidth always pre-set to Unlimited
+        $validated['bandwidth'] = 'Unlimited';
+        $validated['password'] = Hash::make($validated['password']);
 
+        DB::transaction(function () use ($validated) {
+            $user = User::create($validated);
             $user->assignRole('user');
         });
 
@@ -67,23 +64,24 @@ class UserController extends Controller
 
     public function show($id)
     {
-        $user = User::with(['tickets', 'ward'])->findOrFail($id);
+        $user = User::with(['ward', 'installation'])->findOrFail($id);
         $this->authorize('view', $user);
-        return view('users.show', compact('user'));
+
+        $installationData = $this->prepareInstallationData($user);
+
+        return view('users.show', compact('user', 'installationData'));
     }
 
-   
     public function edit($id)
     {
         $user = User::with('ward')->findOrFail($id);
         $this->authorize('update', $user);
+
         $wards = Ward::orderBy('name')->get();
+
         return view('users.edit', compact('user', 'wards'));
     }
 
-    /**
-     * USER: Update own profile
-     */
     public function update(Request $request, $id)
     {
         $user = User::findOrFail($id);
@@ -96,9 +94,10 @@ class UserController extends Controller
             'name'            => 'required|string',
             'phone'           => "required|digits:10|unique:users,phone,{$user->id}",
             'internet_speed'  => 'required|string',
-            'bandwidth'       => 'required|string',
             'email'           => "required|email|unique:users,email,{$user->id}",
             'password'        => 'nullable|min:4',
+            'latitude'        => 'nullable|numeric|between:-90,90',
+            'longitude'       => 'nullable|numeric|between:-180,180',
         ]);
 
         if (!empty($validated['password'])) {
@@ -107,6 +106,9 @@ class UserController extends Controller
             unset($validated['password']);
         }
 
+        // Always enforce Unlimited bandwidth
+        $validated['bandwidth'] = 'Unlimited';
+
         $user->update($validated);
 
         return redirect()
@@ -114,10 +116,10 @@ class UserController extends Controller
             ->with('success', 'Profile updated successfully!');
     }
 
-    
     public function destroy($id)
     {
         $this->authorizeAdmin();
+
         $user = User::findOrFail($id);
 
         if (auth()->id() === $user->id) {
@@ -131,9 +133,6 @@ class UserController extends Controller
             ->with('success', 'User deleted successfully!');
     }
 
-    /**
-     * AJAX: Toggle Internet Status
-     */
     public function updateStatus(Request $request)
     {
         $this->authorizeAdmin();
@@ -158,10 +157,45 @@ class UserController extends Controller
     }
 
     /**
-     * Helper: Allow only Admin
+     * Prepare installation-related UI data
      */
+    private function prepareInstallationData(User $user): ?array
+    {
+        if (!$user->installation) {
+            return null;
+        }
+
+        $inst = $user->installation;
+
+        return [
+            'installed_on' => $inst->installed_on
+                ? Carbon::parse($inst->installed_on)->format('d M Y')
+                : null,
+
+            'expiry_date' => $inst->installed_on
+                ? Carbon::parse($inst->installed_on)->addMonths(6)->format('d M Y')
+                : null,
+
+            'routes' => $inst->routes ?: null,
+            'cables' => $inst->cables ?: null,
+            'has_items' => filled($inst->routes) || filled($inst->cables),
+
+            'image' => $inst->image ? asset('storage/' . $inst->image) : null,
+        ];
+    }
+
     private function authorizeAdmin()
     {
         abort_unless(auth()->user()->hasRole('admin'), 403, 'Unauthorized');
+    }
+
+
+    public function downloadPdf($id)
+    {
+        $user = User::with(['ward', 'installation'])->findOrFail($id);
+
+        $pdf = PDF::loadView('users.pdf', compact('user'))->setPaper('a4');
+
+        return $pdf->download('user-profile-' . $user->id . '.pdf');
     }
 }

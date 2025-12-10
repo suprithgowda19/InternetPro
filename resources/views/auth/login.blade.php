@@ -59,7 +59,7 @@
                                 <div class="col-lg-6 col-12 mb-3">
                                     <div class="d-flex flex-column gap-1 align-items-center justify-content-center">
                                         <img src="{{ asset('assets/images/BBMPlogo.png') }}" width="15%" alt="">
-                                        <h3 class="text-dark fw-bold">Internet Project Login</h3>
+                                        <h3 class="text-dark fw-bold">GBA Namma Clinic <br> Internet Services</h3>
                                         <img src="{{ asset('assets/images/logo/logo-icon.jpg') }}" width="15%" alt="">
                                     </div>
                                 </div>

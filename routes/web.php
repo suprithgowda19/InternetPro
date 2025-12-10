@@ -41,6 +41,13 @@ Route::middleware(['auth'])
 Route::middleware('auth')->group(function () {
     Route::resource('tickets', TicketController::class);
     Route::resource('installations', InstallationController::class);
+    Route::get('/installations/{id}/pdf', [InstallationController::class, 'pdf'])
+    ->name('installations.pdf');
+    Route::get('/users/{id}/pdf', [UserController::class, 'downloadPdf'])
+    ->name('users.pdf');
+    
+
+
 });
 Route::middleware(['auth'])->group(function () {
 
