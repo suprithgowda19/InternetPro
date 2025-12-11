@@ -41,9 +41,9 @@
     <link rel="shortcut icon" href="{{ asset('assets/images/BBMPlogo.png') }}" type="image/x-icon">
 
     <style>
-        /* .page-wrapper.compact-wrapper .page-body-wrapper div.sidebar-wrapper .sidebar-main .simplebar-offset {
+        .page-wrapper.compact-wrapper .page-body-wrapper div.sidebar-wrapper .sidebar-main .simplebar-offset {
             height: auto !important;
-        } */
+        }
         .nav-menus {
             display: flex;
             align-items: center;

@@ -126,13 +126,6 @@
                                     onclick="window.location.href='{{ route('admin.users.edit', $user->id) }}'">
                                     <i class="bi bi-pencil-square"></i>
                                 </button>
-
-                                {{-- Delete (admin only) --}}
-                                <button class="btn btn-sm btn-danger delete-btn"
-                                        data-id="{{ $user->id }}"
-                                        data-url="{{ route('admin.users.destroy', $user->id) }}">
-                                    <i class="bi bi-trash"></i>
-                                </button>
                             @endrole
                         </td>
                     </tr>

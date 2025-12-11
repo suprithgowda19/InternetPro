@@ -22,7 +22,7 @@
 
                     <li class="back-btn">
                         <a href="{{ url('/') }}">
-                            <img class="img-fluid" src="{{ asset('assets/images/logo-icon.png') }}" alt="">
+                            
                         </a>
                         <div class="mobile-back text-end"><span>Back</span></div>
                     </li>
@@ -154,9 +154,6 @@
 
                         </li>
                     @endrole
-
-
-                    {{-- only user PROFILE can access (Users) --}}
 
 
 

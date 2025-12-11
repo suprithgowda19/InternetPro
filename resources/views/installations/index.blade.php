@@ -54,19 +54,6 @@
                                 <i class="bi bi-eye"></i>
                             </a>
 
-                            @role('admin')
-                                <form action="{{ route('installations.destroy', $ins->id) }}"
-                                      method="POST"
-                                      class="d-inline delete-form">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="button"
-                                            class="btn btn-sm btn-danger delete-btn"
-                                            title="Delete">
-                                        <i class="bi bi-trash"></i>
-                                    </button>
-                                </form>
-                            @endrole
                         </td>
                     </tr>
                 @empty
