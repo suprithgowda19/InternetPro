@@ -60,28 +60,6 @@
                                       placeholder="Enter Your Comments..."></textarea>
                         </div>
 
-                        <!-- ITEMS PROVIDED SECTION -->
-                        <hr>
-                        <h5 class="fw-bold mt-3 mb-3">Items Provided</h5>
-
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label fw-semibold">Routes</label>
-                                <input type="text" 
-                                       name="routes" 
-                                       class="form-control" 
-                                       placeholder="Enter route details (optional)">
-                            </div>
-
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label fw-semibold">Cables</label>
-                                <input type="text" 
-                                       name="cables" 
-                                       class="form-control" 
-                                       placeholder="Enter cable type/length (optional)">
-                            </div>
-                        </div>
-
                         <!-- SUBMIT -->
                         <div class="text-center mt-3">
                             <button type="submit" 

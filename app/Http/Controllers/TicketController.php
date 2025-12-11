@@ -49,12 +49,16 @@ class TicketController extends Controller
 
         $validated = $request->validate([
             'description' => 'required|string|max:5000',
+            'contact_person_name'   => 'required|string|max:255',
+            'phone' => 'required|digits:10|regex:/^[0-9]{10}$/',
         ]);
 
         Ticket::create([
             'user_id'     => $user->id,
             'description' => $validated['description'],
             'status'      => 'Pending',
+            'phone'       => $validated['phone'],
+            'contact_person_name'        => $validated['contact_person_name'],
             'admin_remarks' => null,
             'admin_image'   => null,
         ]);

@@ -48,8 +48,15 @@ class UserController extends Controller
             'longitude'       => 'nullable|numeric|between:-180,180',
         ]);
 
-        // Bandwidth always pre-set to Unlimited
+        // Always set these backend-only static properties:
         $validated['bandwidth'] = 'Unlimited';
+        $validated['validity']  = 6; // fixed
+        $validated['items_provided'] = [
+            "Router",
+            "Cable",
+            "Adapter"
+        ];
+
         $validated['password'] = Hash::make($validated['password']);
 
         DB::transaction(function () use ($validated) {
@@ -106,8 +113,14 @@ class UserController extends Controller
             unset($validated['password']);
         }
 
-        // Always enforce Unlimited bandwidth
+        // Always enforce backend-defined fields
         $validated['bandwidth'] = 'Unlimited';
+        $validated['validity']  = 6; // still fixed
+        $validated['items_provided'] = [
+            "Router",
+            "Cable",
+            "Adapter"
+        ];
 
         $user->update($validated);
 
@@ -156,9 +169,6 @@ class UserController extends Controller
         return response()->json(['success' => true]);
     }
 
-    /**
-     * Prepare installation-related UI data
-     */
     private function prepareInstallationData(User $user): ?array
     {
         if (!$user->installation) {
@@ -188,7 +198,6 @@ class UserController extends Controller
     {
         abort_unless(auth()->user()->hasRole('admin'), 403, 'Unauthorized');
     }
-
 
     public function downloadPdf($id)
     {

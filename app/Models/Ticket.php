@@ -11,6 +11,7 @@ class Ticket extends Model
         'user_id',
         'contact_person_name',
         'title',
+        'phone',
         'description',
         'admin_resolution',
         'admin_remarks',

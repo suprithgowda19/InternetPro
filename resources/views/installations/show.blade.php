@@ -51,20 +51,7 @@
         <div class="card shadow" style="border-radius: 18px;">
             <div class="card-body">
 
-                {{-- ACTION BUTTONS --}}
-                <div class="d-flex justify-content-end gap-2 no-print">
-                    
-                    <a href="{{ route('installations.pdf', $installation->id) }}" 
-                       class="btn btn-success">
-                        <i class="bi bi-download"></i> Download PDF
-                    </a>
-
-                    <button onclick="window.print()" 
-                            class="btn btn-primary">
-                        <i class="bi bi-printer"></i> Print
-                    </button>
-
-                </div>
+             
 
                 <h3 class="fw-bold mb-4">Installation Details</h3>
 
@@ -73,17 +60,14 @@
                     {{-- USER DETAILS --}}
                     <div class="col-md-6">
                         <div class="info-card">
-                            <div class="section-title">User Information</div>
-
-                            <p><strong>Name:</strong> {{ $installation->user->name ?? 'N/A' }}</p>
+                            <div class="section-title">User Information</div>      
                             <p><strong>Clinic:</strong> {{ $installation->user->clinic_name ?? 'N/A' }}</p>
                             <p><strong>Ward:</strong> {{ $installation->user->ward->name ?? 'N/A' }}</p>
-                            <p><strong>Phone:</strong> {{ $installation->user->phone ?? 'N/A' }}</p>
+                             <p><strong>Name:</strong> {{ $installation->user->name ?? 'N/A' }}</p>
+                            <p><strong>Contact Number:</strong> {{ $installation->user->phone ?? 'N/A' }}</p>
                             <p><strong>Email:</strong> {{ $installation->user->email ?? 'N/A' }}</p>
                         </div>
-                    </div>
-
-                    {{-- INSTALLATION DETAILS --}}
+                    </div>               
                     <div class="col-md-6">
                         <div class="info-card">
                             <div class="section-title">Installation Information</div>
@@ -96,10 +80,8 @@
                             </p>
 
                             <p>
-                                <strong>Expiry Date:</strong>
-                                {{ $installation->installed_on
-                                    ? \Carbon\Carbon::parse($installation->installed_on)->addMonths(6)->format('d M Y')
-                                    : 'N/A' }}
+                                <strong>Validity:</strong>
+                                6 Months
                             </p>
 
                             <p><strong>Comments:</strong> {{ $installation->comments ?: '—' }}</p>
@@ -107,17 +89,6 @@
                     </div>
 
                 </div>
-
-
-                {{-- ITEMS PROVIDED --}}
-                @if ($installation->routes || $installation->cables)
-                    <div class="info-card mt-4">
-                        <div class="section-title">Items Provided</div>
-
-                        <p><strong>Routes:</strong> {{ $installation->routes ?? 'N/A' }}</p>
-                        <p><strong>Cables:</strong> {{ $installation->cables ?? 'N/A' }}</p>
-                    </div>
-                @endif
 
 
                 {{-- IMAGE --}}

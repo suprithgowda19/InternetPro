@@ -34,7 +34,7 @@
         </div>
         <div class="d-flex align-items-center gap-2">
                <img src="{{ asset('assets/images/BBMPlogo.png') }}" alt="Company Logo" style="width:32px;height:32px;">
-            <h4 class="mb-0 fw-bold">GBA Namma Clinic</h4>
+            <h4 class="mb-0 fw-bold">GBA Namma Clinic - Internet Services</h4>
          
         </div>
 

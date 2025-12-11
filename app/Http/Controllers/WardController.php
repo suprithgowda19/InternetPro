@@ -20,7 +20,7 @@ class WardController extends Controller
     public function index()
     {
         $wards = Ward::with(['constituency.zone.corporation'])
-            ->orderBy('number')
+            ->orderByRaw('number + 0 ASC')
             ->get();
 
         return view('wards.index', compact('wards'));
@@ -54,8 +54,8 @@ class WardController extends Controller
         $validated = $request->validate([
             'name'            => 'required|string|max:255',
             'number'          => 'required|string|max:10|unique:wards,number',
-            'constituency_id' => 'required|exists:constituencies,id',    
-            
+            'constituency_id' => 'required|exists:constituencies,id',
+
         ]);
 
         Ward::create($validated);

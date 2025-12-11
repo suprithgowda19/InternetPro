@@ -119,10 +119,6 @@ class InstallationController extends Controller
             ->route('installations.index')
             ->with('success', 'Installation deleted successfully!');
     }
-
-    /**
-     * Helper to check admin authentication
-     */
     private function authorizeAdmin()
     {
         if (!Auth::user() || !Auth::user()->hasRole('admin')) {
@@ -130,13 +126,4 @@ class InstallationController extends Controller
         }
     }
 
-
-    public function pdf($id)
-    {
-        $installation = Installation::with(['user.ward'])->findOrFail($id);
-
-        $pdf = PDF::loadView('installations.pdf', compact('installation'))->setPaper('a4');
-
-        return $pdf->download('installation-' . $installation->id . '.pdf');
-    }
 }

@@ -33,7 +33,7 @@
                     <div class="mb-3">
                         <label class="form-label fw-semibold">Communication Person</label>
                         <input type="text" class="form-control"
-                               value="{{ $ticket->user->name ?? 'N/A' }}" readonly>
+                               value="{{ $ticket->contact_person_name ?? 'N/A' }}" readonly>
                     </div>
 
                     {{-- Issue Description --}}

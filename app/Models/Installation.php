@@ -16,8 +16,7 @@ class Installation extends Model
         'image',
         'installed_on',
         'comments',
-        'routes',    // NEW
-        'cables',    // NEW
+      
     ];
 
     /**

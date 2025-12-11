@@ -41,8 +41,32 @@
     <link rel="shortcut icon" href="{{ asset('assets/images/BBMPlogo.png') }}" type="image/x-icon">
 
     <style>
-        .page-wrapper.compact-wrapper .page-body-wrapper div.sidebar-wrapper .sidebar-main .simplebar-offset {
+        /* .page-wrapper.compact-wrapper .page-body-wrapper div.sidebar-wrapper .sidebar-main .simplebar-offset {
             height: auto !important;
+        } */
+        .nav-menus {
+            display: flex;
+            align-items: center;
+            flex-direction: row;
+        }
+
+        .footer {
+            margin-left: 0px !important;
+        }
+
+        @media only screen and (max-width: 1366px) and (min-width: 767px) {
+            .page-wrapper.compact-wrapper .page-header .header-wrapper .nav-right {
+                -webkit-box-flex: 0;
+                -ms-flex: 0 0 64%;
+                flex: 0 0 0% !important;
+                max-width: 64%;
+            }
+        }
+
+        @media only screen and (max-width: 767px) {
+            .page-wrapper.compact-wrapper .page-header .header-wrapper .nav-right {
+                margin-left: 0px !important;
+            }
         }
     </style>
 </head>

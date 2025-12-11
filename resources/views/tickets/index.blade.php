@@ -49,7 +49,7 @@
                         <td>{{ optional(optional($ticket->user)->ward)->name ?? 'N/A' }}</td>
 
                 
-                        <td>{{ optional($ticket->user)->phone ?? 'N/A' }}</td>
+                        <td>{{ $ticket->phone ?? 'N/A' }}</td>
 
                       
                         <td>{{ \Illuminate\Support\Str::limit($ticket->description ?? '—', 80) }}</td>

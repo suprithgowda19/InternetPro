@@ -5,9 +5,8 @@ namespace App\Models;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class User extends Authenticatable
 {
@@ -23,8 +22,10 @@ class User extends Authenticatable
         'internet_status',
         'internet_speed',
         'bandwidth',
-        'latitude',   // Newly added
-        'longitude',  // Newly added
+        'latitude',
+        'longitude',
+        'validity',          // NEW
+        'items_provided',    // NEW (JSON)
     ];
 
     protected $hidden = [
@@ -35,8 +36,10 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password'          => 'hashed',
-        'latitude'          => 'decimal:7',   // Optional cast, precision for safety
-        'longitude'         => 'decimal:7',  // Optional cast
+        'latitude'          => 'decimal:7',
+        'longitude'         => 'decimal:7',
+        'items_provided'    => 'array',  
+        'validity'          => 'integer', 
     ];
 
     public function ward(): BelongsTo
@@ -48,6 +51,7 @@ class User extends Authenticatable
     {
         return $this->hasMany(Ticket::class);
     }
+
     public function installation()
     {
         return $this->hasOne(Installation::class);

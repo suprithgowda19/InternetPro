@@ -62,6 +62,25 @@
                                     <div class="invalid-feedback">Please enter contact person name.</div>
                                 @enderror
                             </div>
+                        </div>
+                         <div class="col-md-12">
+
+                            {{-- CONTACT PERSON NAME (USER INPUT) --}}
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Contact Number</label>
+                                <input class="form-control @error('phone') is-invalid @enderror"
+                                       type="text"
+                                       name="phone"
+                                       value="{{ old('phone') }}"
+                                       placeholder="Enter Contact Person Name"
+                                       required>
+
+                                @error('contact_person_name')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @else
+                                    <div class="invalid-feedback">Please enter contact number.</div>
+                                @enderror
+                            </div>
 
                             {{-- ISSUE DESCRIPTION --}}
                             <div class="mb-3">
