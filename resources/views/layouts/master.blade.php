@@ -44,6 +44,7 @@
         .page-wrapper.compact-wrapper .page-body-wrapper div.sidebar-wrapper .sidebar-main .simplebar-offset {
             height: auto !important;
         }
+
         .nav-menus {
             display: flex;
             align-items: center;
@@ -138,6 +139,17 @@
     <script src="{{ asset('assets/js/config.js') }}"></script>
     <script src="{{ asset('assets/js/sidebar-menu.js') }}"></script>
     <script src="{{ asset('assets/js/script.js') }}"></script>
+
+    <script>
+        setTimeout(() => {
+            document.querySelectorAll('.alert').forEach(alert => {
+                alert.style.transition = "all 0.5s ease";
+                alert.style.opacity = "0";
+                alert.style.transform = "translateY(-10px)";
+                setTimeout(() => alert.remove(), 600);
+            });
+        }, 5000);
+    </script>
 
     @stack('scripts')
 

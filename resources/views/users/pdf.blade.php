@@ -54,30 +54,29 @@
             border: 1px solid #aaa;
             margin-top: 6px;
         }
-
-        .title1 {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-bottom: 20px;
-            gap: 20px;
-            flex-direction: row;
-        }
     </style>
 </head>
 
 <body>
 
-    <table width="100%" style="margin-bottom: 20px;">
-        <tr>
-            <td style="text-align: left; font-size: 16px; font-weight: bold;">
-                GBA NAMMA CLINIC - INTERNET SERVICES
-            </td>
+    <div style="margin-bottom: 15px;">
+        <img src="{{ public_path('storage/mcware-logo.png') }}" style="width:110px; height:auto; vertical-align: middle;">
 
-            <td style="text-align: right;">
-                <img src="{{ public_path('storage/mcware-logo.jpg') }}" style="width:32px; height:32px;">
-            </td>
-        </tr>
+        <span
+            style="font-size: 18px;
+                 font-weight: bold;
+                 text-transform: uppercase;
+                 margin-left: 12px;
+                 vertical-align: middle;">
+            GBA NAMMA CLINIC - INTERNET SERVICES
+        </span>
+    </div>
+
+
+
+
+    <table width="100%" style="margin-bottom: 20px;">
+
     </table>
 
     {{-- BASIC DETAILS --}}

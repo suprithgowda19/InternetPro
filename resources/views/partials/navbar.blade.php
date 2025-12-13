@@ -33,16 +33,16 @@
             </div>
         </div>
         <div class="d-flex align-items-center gap-2">
-               <img src="{{ asset('assets/images/BBMPlogo.png') }}" alt="Company Logo" style="width:32px;height:32px;">
+            <img src="{{ asset('assets/images/BBMPlogo.png') }}" alt="Company Logo" style="width:32px;height:32px;">
             <h4 class="mb-0 fw-bold">GBA Namma Clinic - Internet Services</h4>
-         
+            <img src="{{ asset('assets/images/BBMPlogo.png') }}" alt="Company Logo" style="width:32px;height:32px;">
         </div>
 
         <!-- Right: Action Icons -->
 
         <div class="nav-right   pull-right right-header p-0">
             <ul class="nav-menus">
-                
+
                 <li class="maximize">
                     <a class="text-dark" href="#!" onclick="javascript:toggleFullScreen()">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none"

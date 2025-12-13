@@ -10,6 +10,7 @@ use App\Http\Controllers\CorporationUserController;
 use App\Http\Controllers\ZoneController;
 use App\Http\Controllers\WardController;
 use App\Http\Controllers\ConstituencyController;
+use App\Http\Controllers\Api\ClinicSubmissionController;
 
 
 Route::get('/', function () {
@@ -25,7 +26,7 @@ Route::post('/logout', [LoginController::class, 'logout'])
     ->name('logout');
 
 //
-Route::middleware(['auth'])
+Route::middleware(['auth', 'active.user',])
     ->prefix('admin')
     ->name('admin.')
     ->group(function () {
@@ -38,18 +39,15 @@ Route::middleware(['auth'])
         )->name('users.updateStatus');
     });
 
-Route::middleware('auth')->group(function () {
+Route::middleware('auth', 'active.user')->group(function () {
     Route::resource('tickets', TicketController::class);
     Route::resource('installations', InstallationController::class);
     Route::get('/installations/{id}/pdf', [InstallationController::class, 'pdf'])
-    ->name('installations.pdf');
+        ->name('installations.pdf');
     Route::get('/users/{id}/pdf', [UserController::class, 'downloadPdf'])
-    ->name('users.pdf');
-    
-
-
+        ->name('users.pdf');
 });
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth','active.user'])->group(function () {
 
     Route::resource('corporations', CorporationController::class)
         ->except(['destroy']);
@@ -62,5 +60,10 @@ Route::middleware(['auth'])->group(function () {
 
     Route::resource('wards', WardController::class)
         ->except(['destroy']);
-});
 
+
+});
+Route::middleware('auth', 'role:admin')->get('complaints/', [ClinicSubmissionController::class, 'index'])->name('complaints.index');
+Route::middleware(['auth', 'role:admin'])
+    ->get('/complaints/{complaint}', [ClinicSubmissionController::class, 'show'])
+    ->name('complaints.show');

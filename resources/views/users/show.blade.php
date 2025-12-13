@@ -105,10 +105,7 @@
                 </tr>
 
                 {{-- NEW: Validity from user --}}
-                <tr>
-                    <td class="label-col">Validity</td>
-                    <td>{{ $user->validity }} Months</td>
-                </tr>
+
 
                 {{-- NEW: Items Provided --}}
 
@@ -138,16 +135,21 @@
                 <h4 class="mt-4">Package Details</h4>
                 <table class="detail-table">
                     <tr>
-                        <td class="label-col">Installed On</td>
-                        <td>{{ \Carbon\Carbon::parse($user->installation->installed_on)->format('d M Y') }}</td>
+                        <td class="label-col">Internet Status</td>
+                        <td>{{ $user->internet_status }}</td>
                     </tr>
                     <tr>
                         <td class="label-col">Validity</td>
                         <td> 6 Months</td>
                     </tr>
+
                     <tr>
-                        <td class="label-col">Internet Status</td>
-                        <td>{{ $user->internet_status }}</td>
+                        <td class="label-col">Internet Speed</td>
+                        <td>{{ $user->internet_speed }}</td>
+                    </tr>
+                    <tr>
+                        <td class="label-col">Bandwidth</td>
+                        <td>{{ $user->bandwidth }}</td>
                     </tr>
                     <tr>
                         <td class="label-col">Items Provided</td>
@@ -158,14 +160,6 @@
                                 Router, Cable, Adapter
                             @endif
                         </td>
-                    </tr>
-                    <tr>
-                        <td class="label-col">Internet Speed</td>
-                        <td>{{ $user->internet_speed }}</td>
-                    </tr>
-                    <tr>
-                        <td class="label-col">Bandwidth</td>
-                        <td>{{ $user->bandwidth }}</td>
                     </tr>
 
                 </table>

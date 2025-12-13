@@ -49,7 +49,7 @@
                         <div class="mb-3">
                             <label class="form-label fw-semibold">Attached Image</label><br>
 
-                            <img src="{{ asset('storage/' . $ticket->admin_image) }}"
+                            <img src="{{ asset('storage/app/public/' . $ticket->admin_image) }}"
                                  alt="Admin Uploaded Image"
                                  style="max-width: 260px; border-radius: 10px; border: 1px solid #ddd;">
                         </div>

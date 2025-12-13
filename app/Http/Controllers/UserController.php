@@ -12,9 +12,12 @@ use PDF;
 
 class UserController extends Controller
 {
+    /**
+     * List all users (Admin only)
+     */
     public function index()
     {
-        $this->authorizeAdmin();
+        $this->authorize('viewAny', User::class);
 
         $users = User::with('ward')->latest()->get();
         $wards = Ward::select('id', 'name')->get();
@@ -22,18 +25,24 @@ class UserController extends Controller
         return view('users.index', compact('users', 'wards'));
     }
 
+    /**
+     * Show Create User page (Admin only)
+     */
     public function create()
     {
-        $this->authorizeAdmin();
+        $this->authorize('create', User::class);
 
         $wards = Ward::orderByRaw('number + 0 ASC')->get();
 
         return view('users.create', compact('wards'));
     }
 
+    /**
+     * Store new user (Admin only)
+     */
     public function store(Request $request)
     {
-        $this->authorizeAdmin();
+        $this->authorize('create', User::class);
 
         $validated = $request->validate([
             'ward_id'         => 'required|exists:wards,id',
@@ -48,15 +57,9 @@ class UserController extends Controller
             'longitude'       => 'nullable|numeric|between:-180,180',
         ]);
 
-        // Always set these backend-only static properties:
         $validated['bandwidth'] = 'Unlimited';
-        $validated['validity']  = 6; // fixed
-        $validated['items_provided'] = [
-            "Router",
-            "Cable",
-            "Adapter"
-        ];
-
+        $validated['validity']  = 6;
+        $validated['items_provided'] = ["Router", "Cable", "Adapter"];
         $validated['password'] = Hash::make($validated['password']);
 
         DB::transaction(function () use ($validated) {
@@ -69,9 +72,13 @@ class UserController extends Controller
             ->with('success', 'User created successfully!');
     }
 
+    /**
+     * View User Profile (Admin: any user, User: only self)
+     */
     public function show($id)
     {
         $user = User::with(['ward', 'installation'])->findOrFail($id);
+
         $this->authorize('view', $user);
 
         $installationData = $this->prepareInstallationData($user);
@@ -79,9 +86,13 @@ class UserController extends Controller
         return view('users.show', compact('user', 'installationData'));
     }
 
+    /**
+     * Edit User Page (Admin: any user, User: only self)
+     */
     public function edit($id)
     {
         $user = User::with('ward')->findOrFail($id);
+
         $this->authorize('update', $user);
 
         $wards = Ward::orderBy('name')->get();
@@ -89,9 +100,13 @@ class UserController extends Controller
         return view('users.edit', compact('user', 'wards'));
     }
 
+    /**
+     * Update User (Admin: any user, User: only self)
+     */
     public function update(Request $request, $id)
     {
         $user = User::findOrFail($id);
+
         $this->authorize('update', $user);
 
         $validated = $request->validate([
@@ -113,30 +128,29 @@ class UserController extends Controller
             unset($validated['password']);
         }
 
-        // Always enforce backend-defined fields
         $validated['bandwidth'] = 'Unlimited';
-        $validated['validity']  = 6; // still fixed
-        $validated['items_provided'] = [
-            "Router",
-            "Cable",
-            "Adapter"
-        ];
+        $validated['validity']  = 6;
+        $validated['items_provided'] = ["Router", "Cable", "Adapter"];
 
         $user->update($validated);
 
         return redirect()
-            ->back()
-            ->with('success', 'Profile updated successfully!');
+            ->route('admin.users.index')
+            ->with('success', 'User updated successfully!');
     }
 
+    /**
+     * Delete User (Admin only — user cannot delete)
+     */
     public function destroy($id)
     {
-        $this->authorizeAdmin();
-
         $user = User::findOrFail($id);
 
+        $this->authorize('delete', $user);
+
+        // Prevent admin from deleting own account
         if (auth()->id() === $user->id) {
-            return redirect()->back()->with('error', "You can't delete your own account.");
+            return back()->with('error', "You cannot delete your own account.");
         }
 
         $user->delete();
@@ -146,9 +160,12 @@ class UserController extends Controller
             ->with('success', 'User deleted successfully!');
     }
 
+    /**
+     * Update Internet Status (Admin only)
+     */
     public function updateStatus(Request $request)
     {
-        $this->authorizeAdmin();
+        $this->authorize('updateStatus', User::class);
 
         $request->validate([
             'id' => 'required|exists:users,id',
@@ -169,6 +186,9 @@ class UserController extends Controller
         return response()->json(['success' => true]);
     }
 
+    /**
+     * Prepare installation info (same as before)
+     */
     private function prepareInstallationData(User $user): ?array
     {
         if (!$user->installation) {
@@ -186,19 +206,12 @@ class UserController extends Controller
                 ? Carbon::parse($inst->installed_on)->addMonths(6)->format('d M Y')
                 : null,
 
-            'routes' => $inst->routes ?: null,
-            'cables' => $inst->cables ?: null,
+            'routes' => $inst->routes,
+            'cables' => $inst->cables,
             'has_items' => filled($inst->routes) || filled($inst->cables),
-
             'image' => $inst->image ? asset('storage/' . $inst->image) : null,
         ];
     }
-
-    private function authorizeAdmin()
-    {
-        abort_unless(auth()->user()->hasRole('admin'), 403, 'Unauthorized');
-    }
-
     public function downloadPdf($id)
     {
         $user = User::with(['ward', 'installation'])->findOrFail($id);
